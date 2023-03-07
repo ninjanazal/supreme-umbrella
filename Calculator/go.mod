@@ -1,3 +1,3 @@
-module learn/calculator
+module learn/Calculator
 
 go 1.20
