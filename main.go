@@ -5,13 +5,15 @@ package main
 import (
 	"fmt"
 	"learn/Calculator"
-	"learn/StateMachine"
+
+	Logger "learn/Utils/Log"
+	StateMachine "learn/Utils/StateMachine"
 )
 
 func main() {
-	fmt.Println("-- Learning go collection --")
+	Logger.TraceLog("-- Learning go collection --", Logger.LOG, "")
+	Logger.TraceLog("Select a project to launch", Logger.LOG, "")
 
-	fmt.Print("Select a project to launch\n")
 	Calculator.RequestOperation("test")
 
 	fsm := StateMachine.NewMachine("LearnMachine")

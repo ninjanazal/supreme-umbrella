@@ -1,6 +1,9 @@
-package StateMachine
+package Utils
 
-import "fmt"
+import (
+	"fmt"
+	Utils "learn/Utils/Log"
+)
 
 type FSM struct {
 	name    string
@@ -18,7 +21,8 @@ type State struct {
 // @Return {*FSM}: Pointer to a new FSM
 func NewMachine(name string) *FSM {
 	var machine FSM = FSM{name: name}
-	fmt.Printf(fmt.Sprintf("Created a machine names %s\n", machine.name))
+	fmt.Println("Created a machine names " + machine.name)
+	Utils.TraceLog("Test log", Utils.LOG, "")
 	return &machine
 }
 
