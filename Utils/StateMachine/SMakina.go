@@ -2,13 +2,13 @@ package Utils
 
 import (
 	"fmt"
-	Utils "learn/Utils/Log"
+	Logger "learn/Utils/Log"
 )
 
 type FSM struct {
 	name    string
 	current *State
-	states  []*State
+	states  map[*string]State
 }
 
 type State struct {
@@ -22,20 +22,22 @@ type State struct {
 func NewMachine(name string) *FSM {
 	var machine FSM = FSM{name: name}
 	fmt.Println("Created a machine names " + machine.name)
-	Utils.TraceLog("Test log", Utils.LOG, "")
+	Logger.TraceLog("Test log", Logger.LOG, "")
 	return &machine
 }
 
 // Creates a new state on a state machine
 // @stateName {String}
 func (f *FSM) NewState(stateName string) bool {
-	for _, elm := range f.states {
-		if elm.name == stateName {
-			return false
-		}
+
+	_, ok := f.states[&stateName]
+
+	if ok {
+		return false
 	}
+
 	var state *State = &State{name: stateName}
-	f.states = append(f.states, state)
+	f.states[&stateName] = *state
 	return true
 }
 
@@ -45,4 +47,4 @@ func (f FSM) Name() string { return f.name }
 
 // Get the state name
 // @Return {String}: State name
-func (s State) Name() string { return s.name }
+func (s State) Name() *string { return &s.name }

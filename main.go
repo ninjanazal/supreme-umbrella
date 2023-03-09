@@ -10,6 +10,7 @@ import (
 	StateMachine "learn/Utils/StateMachine"
 )
 
+// === === === === === === === === ===
 func main() {
 	Logger.TraceLog("-- Learning go collection --", Logger.LOG, "")
 	Logger.TraceLog("Select a project to launch", Logger.LOG, "")

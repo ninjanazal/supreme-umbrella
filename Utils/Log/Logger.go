@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 )
 
 const fileMaxSize int = 12
@@ -30,11 +31,11 @@ var levelstrings = [...]string{"@", "+@", "!!", "+!!"}
 func TraceLog(msg string, loglvl Level, extraMsg string) {
 	var printMsg string = levelstrings[loglvl]
 
-	printMsg += fmt.Sprintf(" [ %02d:%02d:%02d:%03dms ]", 1, 1, 10, 300)
-
 	pc, file, line, _ := runtime.Caller(1)
 	file = filepath.Base(file)
-	printMsg += generate_caller(file, runtime.FuncForPC(pc).Name(), line)
+
+	printMsg += generateTimeStap()
+	printMsg += generateCaller(file, runtime.FuncForPC(pc).Name(), line)
 
 	printMsg += fmt.Sprintf(" >>  %s ", msg)
 	if extraMsg != "" {
@@ -46,7 +47,7 @@ func TraceLog(msg string, loglvl Level, extraMsg string) {
 
 // Generates the log string with the file and line values
 // @file {String}: caller file name
-func generate_caller(file string, funcname string, line int) string {
+func generateCaller(file string, funcname string, line int) string {
 	if len(file) > fileMaxSize {
 		file = file[:fileMaxSize] + "..."
 	}
@@ -54,12 +55,25 @@ func generate_caller(file string, funcname string, line int) string {
 	splits := strings.Split(funcname, "/")
 	funcname = splits[len(splits)-1]
 	splits = strings.Split(funcname, ".")
-	funcname = splits[len(splits)-1] + "( )"
+	funcname = splits[len(splits)-1] + "()"
 
 	if len(funcname) > funcMaxSize {
 		funcname = funcname[:funcMaxSize] + "..."
 	}
 
 	result := fmt.Sprintf(" [ %-15s ] [ %-20s ] [ Line: %-3d ]", file, funcname, line)
+	return result
+}
+
+// Generates the time stamp for the trace log print
+// @Return {String}: Formated time stamp
+func generateTimeStap() string {
+	cTime := time.Now()
+
+	var result string = fmt.Sprintf(
+		" [ %d-%02d-%02d %02d:%02d:%02d:%03d ] ",
+		cTime.Year(), cTime.Month(), cTime.Day(),
+		cTime.Hour(), cTime.Minute(), cTime.Second(), cTime.UnixNano()*(1.0/int64(time.Millisecond)))
+
 	return result
 }
