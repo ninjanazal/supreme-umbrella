@@ -3,11 +3,10 @@
 package main
 
 import (
-	"fmt"
 	"learn/Calculator"
 
 	Logger "learn/Utils/Log"
-	StateMachine "learn/Utils/StateMachine"
+	SMachine "learn/Utils/StateMachine"
 )
 
 // === === === === === === === === ===
@@ -16,7 +15,8 @@ func main() {
 	Logger.TraceLog("Select a project to launch", Logger.LOG, "")
 
 	Calculator.RequestOperation("test")
+	fsm := SMachine.NewMachine("LearnMachine")
 
-	fsm := StateMachine.NewMachine("LearnMachine")
-	fmt.Println(fsm.Name())
+	CreateCoreFSM(&fsm)
+	fsm.BootMachineOn("selection")
 }

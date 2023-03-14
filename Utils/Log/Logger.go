@@ -28,7 +28,7 @@ var levelstrings = [...]string{"@", "+@", "!!", "+!!"}
 // @msg {String}: Main message to display
 // @loglvl {Level}: Log level
 // @extraMsg {String}: Extra print message
-func TraceLog(msg string, loglvl Level, extraMsg string) {
+func TraceLog(msg string, loglvl Level, extraMsg ...string) {
 	var printMsg string = levelstrings[loglvl]
 
 	pc, file, line, _ := runtime.Caller(1)
@@ -38,8 +38,8 @@ func TraceLog(msg string, loglvl Level, extraMsg string) {
 	printMsg += generateCaller(file, runtime.FuncForPC(pc).Name(), line)
 
 	printMsg += fmt.Sprintf(" >>  %s ", msg)
-	if extraMsg != "" {
-		printMsg += fmt.Sprintf(" { %s }", extraMsg)
+	if len(extraMsg) > 0 {
+		printMsg += fmt.Sprintf(" { %s }", extraMsg[0])
 	}
 
 	fmt.Println(printMsg)
