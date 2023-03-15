@@ -95,3 +95,11 @@ func (f *FSM) GoToNextState(stateName *string) bool {
 	Logger.TraceLog("Failed to change to state "+*stateName+", not found ", Logger.WARN)
 	return false
 }
+
+// Get the current state name if active, else return empty string
+func (f *FSM) GetCurrentName() *string {
+	if f.active {
+		return &f.current.name
+	}
+	return nil
+}
