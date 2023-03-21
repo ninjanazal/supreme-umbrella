@@ -1,4 +1,4 @@
-package utils
+package Operations
 
 import "hash/fnv"
 

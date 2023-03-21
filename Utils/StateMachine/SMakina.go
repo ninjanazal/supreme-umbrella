@@ -1,9 +1,9 @@
-package Utils
+package FSM
 
 import (
+	Operations "SupUmbrela/Utils"
+	Logger "SupUmbrela/Utils/Log"
 	"fmt"
-	Operations "learn/Utils"
-	Logger "learn/Utils/Log"
 )
 
 type FSM struct {
@@ -74,32 +74,66 @@ func (f *FSM) BootMachineOn(stateName string) bool {
 // Request a state change by name
 // @stateName {String}: Target state name
 // Return {bool}:
-func (f *FSM) GoToNextState(stateName *string) bool {
+func (f *FSM) GoToNextState(stateName string) bool {
 	if !f.active {
 		Logger.TraceLog("Innactive stateMachine, please boot", Logger.WARN)
 		return false
 	}
 
-	t_state, ok := f.states[Operations.Hash(stateName)]
+	t_state, ok := f.states[Operations.Hash(&stateName)]
 	if ok {
-		if t_state.ValidNext(stateName) {
-			Logger.TraceLog("Change state to "+*stateName, Logger.LOG)
+		if f.current.ValidNext(&stateName) {
+			Logger.TraceLog("Change state to "+stateName, Logger.LOG)
 			f.current = &t_state
-			f.on_change(&f.current.name)
-			f.current.on_enter()
+			if f.on_change != nil {
+				f.on_change(&f.current.name)
+			}
+			if f.current.on_enter != nil {
+				f.current.on_enter()
+			}
 			return true
 		}
-		Logger.TraceLog("Failed to change to state "+*stateName+" from "+f.current.name, Logger.WARN)
+		Logger.TraceLog("Failed to change to state "+stateName+" from "+f.current.name, Logger.WARN)
 		return false
 	}
-	Logger.TraceLog("Failed to change to state "+*stateName+", not found ", Logger.WARN)
+	Logger.TraceLog("Failed to change to state "+stateName+", not found ", Logger.WARN)
 	return false
 }
 
 // Get the current state name if active, else return empty string
+// @Return {*String} Pointer to the current state name if defined else nill
 func (f *FSM) GetCurrentName() *string {
 	if f.active {
 		return &f.current.name
 	}
 	return nil
+}
+
+// Gets a pointer to the current state if defined
+// @Return {*State} Pointer to the current state f defined else nill
+func (f *FSM) GetCurrentState() *State {
+	if f.active {
+		return f.current
+	}
+	return nil
+}
+
+// Gets the input help string for the current state
+// @Return {string} On Input help string
+func (f *FSM) OnInputOptions() string {
+	if f.current.on_input != nil {
+		return f.current.on_input()
+	}
+	return ""
+}
+
+// Process the input for the current state
+// @data {*String}: Input string
+// @fsm {*FSM}: Pointer to the current machine
+
+func (f *FSM) OnInputProcess(fsm *FSM, data *string) bool {
+	if f.current.on_process != nil {
+		return f.current.on_process(fsm, data)
+	}
+	return false
 }

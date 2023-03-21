@@ -1,13 +1,15 @@
-package Utils
+package FSM
 
 import (
-	Operations "learn/Utils"
+	Operations "SupUmbrela/Utils"
 )
 
 type State struct {
-	name     string
-	next     map[uint32]*State
-	on_enter func()
+	name       string
+	next       map[uint32]*State
+	on_enter   func()
+	on_input   func() string
+	on_process func(*FSM, *string) bool
 }
 
 // State Constructor
@@ -45,4 +47,12 @@ func (s *State) ValidNext(next_state *string) bool {
 
 // Get the state name
 // @Return {String}: State name
-func (s State) Name() *string { return &s.name }
+func (s *State) Name() *string { return &s.name }
+
+// Sets the Callback funtion on state should display available optons
+// @onInput {func() string}: On state request actions
+func (s *State) SetonInputActions(onInput func() string) { s.on_input = onInput }
+
+// Set the on input process callback function
+// @onProcess {func() bool}: On state input process action
+func (s *State) SetonInputProcess(onProcess func(*FSM, *string) bool) { s.on_process = onProcess }

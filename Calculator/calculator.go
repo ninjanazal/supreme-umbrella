@@ -2,8 +2,8 @@
 package Calculator
 
 import (
+	Logger "SupUmbrela/Utils/Log"
 	"fmt"
-	Logger "learn/Utils/Log"
 )
 
 // Process a requested operation as string
