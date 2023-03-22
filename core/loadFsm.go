@@ -15,10 +15,14 @@ func CreateCoreFSM(fsm *SMachine.FSM) {
 	selectionState := SMachine.NewState("selection")
 	calculatorState := SMachine.NewState("calculator")
 
+	// Set input actions & process
+	// Selection state
 	selectionState.SetonInputActions(OnSelectorInputActions)
 	selectionState.SetonInputProcess(OnSelectorProcessInput)
 
+	// Calculator state
 	calculatorState.SetonInputActions(OnCalculatorInputActions)
+	calculatorState.SetonInputProcess(OnCalculatorProcessInput)
 
 	fsm.AddState(selectionState)
 	fsm.AddState(calculatorState)
@@ -45,14 +49,14 @@ func InputOptions(fsm *SMachine.FSM) bool {
 // Process the user input data
 // @data {*string}: Input data
 func ProcessInput(fsm *SMachine.FSM, data *string) bool {
-	if fsm.OnInputProcess(fsm, data) {
-		return true
-	}
-
 	// Default process input
 	switch *data {
 	case "-e":
 		return false
+	}
+
+	if fsm.OnInputProcess(fsm, data) {
+		return true
 	}
 
 	Logger.TraceLog("Invalid input, please attend to the instructions", Logger.LOG)

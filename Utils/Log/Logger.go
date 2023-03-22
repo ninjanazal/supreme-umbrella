@@ -61,7 +61,7 @@ func generateCaller(file string, funcname string, line int) string {
 		funcname = funcname[:funcMaxSize] + "..."
 	}
 
-	result := fmt.Sprintf(" [ %-15s ] [ %-20s ] [ Line: %-3d ]", file, funcname, line)
+	result := fmt.Sprintf(" [ %-15s ] [ %-23s ] [ Line: %-3d ]", file, funcname, line)
 	return result
 }
 

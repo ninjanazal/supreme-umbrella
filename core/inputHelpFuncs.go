@@ -3,6 +3,9 @@ package SupCore
 import (
 	Logger "SupUmbrela/Utils/Log"
 	SMachine "SupUmbrela/Utils/StateMachine"
+	"fmt"
+
+	Calculator "SupUmbrela/Calculator"
 )
 
 // ON Input actions for the selector state
@@ -31,4 +34,11 @@ func OnSelectorProcessInput(fsm *SMachine.FSM, data *string) bool {
 // Return {string}: Input available actions string
 func OnCalculatorInputActions() string {
 	return "-> Please insert a expression to be calculated\n"
+}
+
+// On Process input for the calculator state
+func OnCalculatorProcessInput(fsm *SMachine.FSM, data *string) bool {
+	var response int = Calculator.RequestOperation(*data)
+	Logger.TraceLog("= "+fmt.Sprint(response), Logger.LOG)
+	return response == -1
 }

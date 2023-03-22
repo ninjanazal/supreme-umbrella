@@ -11,6 +11,7 @@ import (
 	SMachine "SupUmbrela/Utils/StateMachine"
 )
 
+// Executes the core main loop
 func Run() {
 	var scanner *bufio.Scanner = bufio.NewScanner(os.Stdin)
 
