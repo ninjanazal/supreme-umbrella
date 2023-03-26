@@ -40,5 +40,5 @@ func OnCalculatorInputActions() string {
 func OnCalculatorProcessInput(fsm *SMachine.FSM, data *string) bool {
 	var response int = Calculator.RequestOperation(*data)
 	Logger.TraceLog("= "+fmt.Sprint(response), Logger.LOG)
-	return response == -1
+	return true
 }
