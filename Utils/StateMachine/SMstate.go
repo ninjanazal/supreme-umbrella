@@ -63,3 +63,4 @@ func (s *State) SetonInputActions(onInput func() string) { s.on_input = onInput 
 // Set the on input process callback function
 // @onProcess {func() bool}: On state input process action
 func (s *State) SetonInputProcess(onProcess func(*FSM, *string) bool) { s.on_process = onProcess }
+  
