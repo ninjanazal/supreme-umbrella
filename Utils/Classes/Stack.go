@@ -25,8 +25,8 @@ func (s *Stack[T]) Pop() T {
 	if len(*s) == 0 {
 		return *new(T)
 	}
-	var obj T = (*s)[len(*s)]
-	*s = (*s)[:len(*s)-1]
+	var obj T = (*s)[len(*s)-1]
+	*s = (*s)[:len(*s)]
 	return obj
 }
 
@@ -37,7 +37,7 @@ func (s *Stack[T]) Peek() T {
 	if len(*s) == 0 {
 		return *new(T)
 	}
-	return (*s)[len(*s)]
+	return (*s)[len(*s)-1]
 }
 
 // Len returns the number of elements in the stack.

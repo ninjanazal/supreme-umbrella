@@ -39,13 +39,13 @@ func (f *FSM) SetOnChangeCallback(f_callback func(*string)) {
 // Creates a new state on a state machine
 // @stateName {String}
 func (f *FSM) AddState(stateObj State) bool {
-	_, ok := f.states[Operations.Hash(&stateObj.name)]
+	_, ok := f.states[Operations.Hash(stateObj.name)]
 
 	if ok {
 		return false
 	}
 
-	f.states[Operations.Hash(&stateObj.name)] = stateObj
+	f.states[Operations.Hash(stateObj.name)] = stateObj
 	return true
 }
 
@@ -53,7 +53,7 @@ func (f *FSM) AddState(stateObj State) bool {
 // @stateName {*String}: Target state name
 // Return {bool}: Was able to boot
 func (f *FSM) BootMachineOn(stateName string) bool {
-	t_state, ok := f.states[Operations.Hash(&stateName)]
+	t_state, ok := f.states[Operations.Hash(stateName)]
 	if ok {
 		f.active = true
 		f.current = &t_state
@@ -80,7 +80,7 @@ func (f *FSM) GoToNextState(stateName string) bool {
 		return false
 	}
 
-	t_state, ok := f.states[Operations.Hash(&stateName)]
+	t_state, ok := f.states[Operations.Hash(stateName)]
 	if ok {
 		if f.current.ValidNext(&stateName) {
 			Logger.TraceLog("Change state to "+stateName, Logger.LOG)

@@ -38,7 +38,7 @@ func OnCalculatorInputActions() string {
 
 // On Process input for the calculator state
 func OnCalculatorProcessInput(fsm *SMachine.FSM, data *string) bool {
-	var response int = Calculator.RequestOperation(*data)
+	var response float32 = Calculator.RequestOperation(*data)
 	Logger.TraceLog("= "+fmt.Sprint(response), Logger.LOG)
 	return true
 }

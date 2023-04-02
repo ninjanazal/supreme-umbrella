@@ -1,9 +1,11 @@
 package Calculator
 
 import (
-	Opr "SupUmbrela/Utils"
+	Operations "SupUmbrela/Utils"
 	Classes "SupUmbrela/Utils/Classes"
+	"bytes"
 	"strings"
+	"unicode"
 )
 
 // Minimize removes all spaces from the given string by replacing all spaces with an empty string.
@@ -12,47 +14,37 @@ func Minimize(data *string) {
 	*data = strings.ReplaceAll(*data, " ", "")
 }
 
-// PostFix converts an infix expression to postfix notation.
-// @param data {*string} - A pointer to a string that represents the infix expression to convert.
-// @return {string} - A string that represents the postfix notation of the input expression.
-func PostFix(data *string) string {
-	var dataStack *Classes.Stack[byte] = Classes.NewStack[byte]()
-	var result strings.Builder = strings.Builder{}
+// QueueOperation takes a string input and a pointer to a Queue of strings and
+// separates the input into individual numbers and operators, adding each to
+// the queue. Any character that is not a digit or a semicolon is treated as
+// an operator. If the input ends with a number, it will be added to the queue
+// after processing the input.
+// stkOut (*Classes.Queue[string]): A pointer to the output queue that will
+// hold the separated input.
+// data (*string): A pointer to the input string to separate.
+func QueueOperation(stkOut *Classes.Queue[string], data *string) {
+	var dataP bytes.Buffer = bytes.Buffer{}
 
-	for _, lookInChar := range *data {
-		switch lookInChar {
-		case '(':
-			dataStack.Push(byte(lookInChar))
-		case ')':
-			for dataStack.Peek() != '(' {
-				result.WriteByte(dataStack.Pop())
-				result.WriteByte(' ')
-			}
-			dataStack.Pop()
-		case '+', '-', '*', '/', '^':
-			result.WriteByte(byte(lookInChar))
-			result.WriteByte(' ')
+	for i := 0; i < len(*data); i++ {
+		character := (*data)[i]
+		isSemicolum := Operations.IsSemicolum(&character)
 
-			for i := 1; i < len(*data); i++ {
-				nextChar := (*data)[1]
-				if nextChar == '(' {
-					dataStack.Push(nextChar)
-				} else if Opr.IsOperator(&nextChar) || nextChar == '-' {
-					result.WriteByte(byte(nextChar))
-					result.WriteByte(' ')
-					i++
-				} else {
-					break
-				}
+		if !unicode.IsDigit(rune(character)) && !isSemicolum {
+			if dataP.Len() > 0 {
+				stkOut.Add(dataP.String())
+				dataP.Reset()
 			}
-		default:
-			result.WriteString(string(lookInChar))
-			result.WriteByte(' ')
+			stkOut.Add(string(character))
+		} else {
+			if isSemicolum {
+				dataP.WriteByte('.')
+			} else {
+				dataP.WriteByte(character)
+			}
 		}
 	}
-	for !dataStack.IsEmpty() {
-		result.WriteByte(dataStack.Pop())
-		result.WriteByte(' ')
+	if dataP.Len() > 0 {
+		stkOut.Add(dataP.String())
+		dataP.Reset()
 	}
-	return result.String()
 }

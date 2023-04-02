@@ -31,9 +31,9 @@ func NewState(name string) State {
 // Otherwise, it does nothing and returns false.
 // @return {bool} - Returns true if the next state was added to the map, false if it was already present
 func (s *State) AddNextState(nextS *State) bool {
-	_, ok := s.next[Operations.Hash(&nextS.name)]
+	_, ok := s.next[Operations.Hash(nextS.name)]
 	if !ok {
-		s.next[Operations.Hash(&nextS.name)] = nextS
+		s.next[Operations.Hash(nextS.name)] = nextS
 		return true
 	}
 	return false
@@ -48,7 +48,7 @@ func (s *State) SetOnEnterCallback(cBack func()) {
 
 // Gets if a state by name is a valid next state
 func (s *State) ValidNext(next_state *string) bool {
-	_, ok := s.next[Operations.Hash(next_state)]
+	_, ok := s.next[Operations.Hash(*next_state)]
 	return bool(ok)
 }
 
@@ -63,4 +63,3 @@ func (s *State) SetonInputActions(onInput func() string) { s.on_input = onInput 
 // Set the on input process callback function
 // @onProcess {func() bool}: On state input process action
 func (s *State) SetonInputProcess(onProcess func(*FSM, *string) bool) { s.on_process = onProcess }
-  
