@@ -1,7 +1,12 @@
+// Main package for the lerning projects
+// This will act as a launcher for the different created projects
 package main
 
-import "fmt"
+import (
+	"SupUmbrela/core"
+)
 
+// === === === === === === === === ===
 func main() {
-	fmt.Println("-- Learning go collection --")
+	SupCore.Run()
 }

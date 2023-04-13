@@ -1,0 +1,5 @@
+# VSCode
+.vscode/
+
+# Debug builds
+__debug_bin.*

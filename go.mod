@@ -1,3 +1,3 @@
-module learn/main
+module SupUmbrela
 
 go 1.20
